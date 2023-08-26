@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet author="Bozhidar Kuzmanov" id="2">
+        <preConditions>
+            <tableExists tableName="merchant"/>
+        </preConditions>
+
+        <createTable tableName="transaction">
+
+            <column name="id" type="char(36)">
+                <constraints unique="true" nullable="false" primaryKey="true"/>
+            </column>
+
+            <column name="created_at" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="customer_email" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="customer_phone" type="varchar(13)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="reference_id" type="varchar(20)"/>
+
+            <column name="transaction_status" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="merchant_id" type="char(36)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="transaction_type" type="varchar(31)">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="transaction" baseColumnNames="merchant_id" constraintName="transaction_to_merchant_fk" referencedTableName="merchant"
+                                 referencedColumnNames="id"/>
+
+    </changeSet>
+</databaseChangeLog>
