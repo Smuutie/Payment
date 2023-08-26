@@ -10,6 +10,6 @@ import lombok.EqualsAndHashCode;
 @DiscriminatorValue("Reversal")
 public class ReversalTransaction extends BaseTransaction {
 
-    @OneToOne(mappedBy = "reversalTransaction",fetch = FetchType.EAGER)
-    private AuthorizeTransaction authorizeTransaction;
+  @OneToOne(mappedBy = "reversalTransaction", fetch = FetchType.EAGER)
+  private AuthorizeTransaction authorizeTransaction;
 }

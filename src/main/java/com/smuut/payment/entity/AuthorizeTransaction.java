@@ -11,15 +11,15 @@ import lombok.EqualsAndHashCode;
 @DiscriminatorValue("Authorize")
 public class AuthorizeTransaction extends BaseTransaction {
 
-    @NotNull
-    @Column(name = "authorized_amount")
-    private Double amount;
+  @NotNull
+  @Column(name = "authorized_amount")
+  private Double amount;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "charge_to_authorize_transaction_id")
-    private ChargeTransaction chargeTransaction;
+  @OneToOne(fetch = FetchType.LAZY, optional = false)
+  @JoinColumn(name = "charge_to_authorize_transaction_id")
+  private ChargeTransaction chargeTransaction;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "reversal_to_authorize_transaction_id")
-    private ReversalTransaction reversalTransaction;
+  @OneToOne(fetch = FetchType.LAZY, optional = false)
+  @JoinColumn(name = "reversal_to_authorize_transaction_id")
+  private ReversalTransaction reversalTransaction;
 }

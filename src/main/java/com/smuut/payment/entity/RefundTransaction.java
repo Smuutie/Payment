@@ -11,11 +11,11 @@ import lombok.EqualsAndHashCode;
 @DiscriminatorValue("Refund")
 public class RefundTransaction extends BaseTransaction {
 
-    @NotNull
-    @OneToOne(mappedBy = "refundTransaction",fetch = FetchType.EAGER, optional = false)
-    private ChargeTransaction chargeTransaction;
+  @NotNull
+  @OneToOne(mappedBy = "refundTransaction", fetch = FetchType.EAGER, optional = false)
+  private ChargeTransaction chargeTransaction;
 
-    @NotNull
-    @Column(name = "refund_amount")
-    private Double amount;
+  @NotNull
+  @Column(name = "refund_amount")
+  private Double amount;
 }
