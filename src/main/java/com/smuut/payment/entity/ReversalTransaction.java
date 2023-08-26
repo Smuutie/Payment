@@ -1,7 +1,6 @@
 package com.smuut.payment.entity;
 
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -11,4 +10,6 @@ import lombok.EqualsAndHashCode;
 @DiscriminatorValue("Reversal")
 public class ReversalTransaction extends BaseTransaction {
 
+    @OneToOne(mappedBy = "reversalTransaction",fetch = FetchType.EAGER)
+    private AuthorizeTransaction authorizeTransaction;
 }

@@ -2,6 +2,7 @@ package com.smuut.payment.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,6 +17,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
+@Table(name = "transaction")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "transaction_type")
 public abstract class BaseTransaction {
@@ -33,6 +35,7 @@ public abstract class BaseTransaction {
     @Email
     private String customerEmail;
 
+    @NotEmpty
     @Pattern(regexp = "(\\+\\d{3}|0{1})\\d{9}")
     private String customerPhone;
 

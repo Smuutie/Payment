@@ -1,7 +1,7 @@
 package com.smuut.payment.entity;
 
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -11,5 +11,11 @@ import lombok.EqualsAndHashCode;
 @DiscriminatorValue("Refund")
 public class RefundTransaction extends BaseTransaction {
 
+    @NotNull
+    @OneToOne(mappedBy = "refundTransaction",fetch = FetchType.EAGER, optional = false)
+    private ChargeTransaction chargeTransaction;
+
+    @NotNull
+    @Column(name = "refund_amount")
     private Double amount;
 }

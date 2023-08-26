@@ -1,0 +1,21 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet author="Bozhidar Kuzmanov" id="6">
+
+        <preConditions>
+            <tableExists tableName="transaction"/>
+            <columnExists tableName="transaction" columnName="id"/>
+        </preConditions>
+
+        <addColumn tableName="transaction">
+            <column name="reversal_to_authorize_transaction_id" type="char(36)"/>
+        </addColumn>
+
+        <addForeignKeyConstraint baseTableName="transaction" baseColumnNames="reversal_to_authorize_transaction_id"
+                                 constraintName="reversal_to_authorize_transaction_fk"
+                                 referencedTableName="transaction"
+                                 referencedColumnNames="id"/>
+
+    </changeSet>
+</databaseChangeLog>
