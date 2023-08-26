@@ -1,11 +1,11 @@
 package com.smuut.payment.service.impl;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 import com.smuut.payment.dto.TransactionCreateDTO;
-import com.smuut.payment.entity.TransactionType;
+import com.smuut.payment.entity.*;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -29,6 +29,9 @@ public class TransactionFactoryTest {
   public void whenCreateTransactionWithAuthorizeTypeCalled_ThenReturnCorrectTransactionType() {
     final var transactionCreateDTO =
         TransactionCreateDTO.builder().type(TransactionType.AUTHORIZE).build();
+    when(authorizeTransactionService.createTransactionInternal(transactionCreateDTO))
+        .thenReturn(Optional.of(new AuthorizeTransaction()));
+
     final var newTransaction = transactionFactory.createTransaction(transactionCreateDTO);
 
     assertTrue(newTransaction.isPresent());
@@ -39,6 +42,9 @@ public class TransactionFactoryTest {
   public void whenCreateTransactionWithChargeTypeCalled_ThenReturnCorrectTransactionType() {
     final var transactionCreateDTO =
         TransactionCreateDTO.builder().type(TransactionType.CHARGE).build();
+    when(chargeTransactionService.createTransactionInternal(transactionCreateDTO))
+        .thenReturn(Optional.of(new ChargeTransaction()));
+
     final var newTransaction = transactionFactory.createTransaction(transactionCreateDTO);
 
     assertTrue(newTransaction.isPresent());
@@ -49,6 +55,9 @@ public class TransactionFactoryTest {
   public void whenCreateTransactionWithRefundTypeCalled_ThenReturnCorrectTransactionType() {
     final var transactionCreateDTO =
         TransactionCreateDTO.builder().type(TransactionType.REFUND).build();
+    when(refundTransactionService.createTransactionInternal(transactionCreateDTO))
+        .thenReturn(Optional.of(new RefundTransaction()));
+
     final var newTransaction = transactionFactory.createTransaction(transactionCreateDTO);
 
     assertTrue(newTransaction.isPresent());
@@ -59,6 +68,9 @@ public class TransactionFactoryTest {
   public void whenCreateTransactionWithReversalTypeCalled_ThenReturnCorrectTransactionType() {
     final var transactionCreateDTO =
         TransactionCreateDTO.builder().type(TransactionType.REVERSAL).build();
+    when(reversalTransactionService.createTransactionInternal(transactionCreateDTO))
+        .thenReturn(Optional.of(new ReversalTransaction()));
+
     final var newTransaction = transactionFactory.createTransaction(transactionCreateDTO);
 
     assertTrue(newTransaction.isPresent());
