@@ -1,3 +1,3 @@
 package com.smuut.payment.dto;
 
-public class RefundTransactionGetDTO {}
+public class RefundTransactionGetDTO extends TransactionGetDTO {}

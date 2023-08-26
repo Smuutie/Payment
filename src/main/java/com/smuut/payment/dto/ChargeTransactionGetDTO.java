@@ -1,3 +1,3 @@
 package com.smuut.payment.dto;
 
-public class ChargeTransactionGetDTO {}
+public class ChargeTransactionGetDTO extends TransactionGetDTO {}

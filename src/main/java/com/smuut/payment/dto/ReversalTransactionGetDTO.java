@@ -1,3 +1,3 @@
 package com.smuut.payment.dto;
 
-public class ReversalTransactionGetDTO {}
+public class ReversalTransactionGetDTO extends TransactionGetDTO {}

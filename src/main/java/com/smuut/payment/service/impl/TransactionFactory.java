@@ -1,4 +1,4 @@
-package com.smuut.payment.service;
+package com.smuut.payment.service.impl;
 
 import com.smuut.payment.dto.TransactionCreateDTO;
 import com.smuut.payment.entity.*;

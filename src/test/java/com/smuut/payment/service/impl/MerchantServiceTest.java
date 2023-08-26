@@ -1,4 +1,4 @@
-package com.smuut.payment.service;
+package com.smuut.payment.service.impl;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -7,7 +7,6 @@ import static org.mockito.ArgumentMatchers.eq;
 import com.smuut.payment.dto.MerchantCreateDTO;
 import com.smuut.payment.entity.Merchant;
 import com.smuut.payment.repository.MerchantRepository;
-import com.smuut.payment.service.impl.MerchantServiceImpl;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -65,7 +64,7 @@ public class MerchantServiceTest {
   }
 
   @Test
-  public void whenDeleteMerchantIsCalled_ThenReturnMerchantGetDTO() {
+  public void whenDeleteMerchantIsCalled_ThenReturnTrue() {
     final var merchantEntity = Mockito.mock(Merchant.class);
     Mockito.when(merchantRepository.findById(any(UUID.class)))
         .thenReturn(Optional.of(merchantEntity));
