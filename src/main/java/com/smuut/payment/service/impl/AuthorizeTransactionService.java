@@ -2,6 +2,7 @@ package com.smuut.payment.service.impl;
 
 import com.smuut.payment.dto.AuthorizeTransactionGetDTO;
 import com.smuut.payment.dto.TransactionCreateDTO;
+import com.smuut.payment.entity.AuthorizeTransaction;
 import com.smuut.payment.repository.AuthorizeTransactionRepository;
 import com.smuut.payment.service.TransactionService;
 import java.util.Collection;
@@ -19,6 +20,11 @@ public class AuthorizeTransactionService implements TransactionService<Authorize
 
   @Override
   public Optional<AuthorizeTransactionGetDTO> createTransaction(
+      TransactionCreateDTO transactionCreateDTO) {
+    throw new UnsupportedOperationException();
+  }
+
+  Optional<AuthorizeTransaction> createTransactionInternal(
       TransactionCreateDTO transactionCreateDTO) {
     throw new UnsupportedOperationException();
   }

@@ -2,6 +2,7 @@ package com.smuut.payment.service.impl;
 
 import com.smuut.payment.dto.ChargeTransactionGetDTO;
 import com.smuut.payment.dto.TransactionCreateDTO;
+import com.smuut.payment.entity.ChargeTransaction;
 import com.smuut.payment.service.TransactionService;
 import java.util.Collection;
 import java.util.Optional;
@@ -16,6 +17,10 @@ public class ChargeTransactionService implements TransactionService<ChargeTransa
   @Override
   public Optional<ChargeTransactionGetDTO> createTransaction(
       TransactionCreateDTO transactionCreateDTO) {
+    throw new UnsupportedOperationException();
+  }
+
+  Optional<ChargeTransaction> createTransactionInternal(TransactionCreateDTO transactionCreateDTO) {
     throw new UnsupportedOperationException();
   }
 

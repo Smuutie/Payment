@@ -2,6 +2,7 @@ package com.smuut.payment.service.impl;
 
 import com.smuut.payment.dto.RefundTransactionGetDTO;
 import com.smuut.payment.dto.TransactionCreateDTO;
+import com.smuut.payment.entity.RefundTransaction;
 import com.smuut.payment.service.TransactionService;
 import java.util.Collection;
 import java.util.Optional;
@@ -16,6 +17,10 @@ public class RefundTransactionService implements TransactionService<RefundTransa
   @Override
   public Optional<RefundTransactionGetDTO> createTransaction(
       TransactionCreateDTO transactionCreateDTO) {
+    throw new UnsupportedOperationException();
+  }
+
+  Optional<RefundTransaction> createTransactionInternal(TransactionCreateDTO transactionCreateDTO) {
     throw new UnsupportedOperationException();
   }
 

@@ -2,6 +2,7 @@ package com.smuut.payment.service.impl;
 
 import com.smuut.payment.dto.ReversalTransactionGetDTO;
 import com.smuut.payment.dto.TransactionCreateDTO;
+import com.smuut.payment.entity.ReversalTransaction;
 import com.smuut.payment.service.TransactionService;
 import java.util.Collection;
 import java.util.Optional;
@@ -15,6 +16,11 @@ import org.springframework.stereotype.Service;
 public class ReversalTransactionService implements TransactionService<ReversalTransactionGetDTO> {
   @Override
   public Optional<ReversalTransactionGetDTO> createTransaction(
+      TransactionCreateDTO transactionCreateDTO) {
+    throw new UnsupportedOperationException();
+  }
+
+  Optional<ReversalTransaction> createTransactionInternal(
       TransactionCreateDTO transactionCreateDTO) {
     throw new UnsupportedOperationException();
   }
