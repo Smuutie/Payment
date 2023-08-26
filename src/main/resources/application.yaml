@@ -1,0 +1,6 @@
+spring:
+  docker:
+    compose:
+      file: docker-compose.yaml
+server:
+  port: 9080
