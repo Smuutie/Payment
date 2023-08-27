@@ -29,12 +29,16 @@ public class BaseTransactionService implements TransactionService<TransactionGet
 
   @Override
   public Page<TransactionGetDTO> getTransactions(Pageable pageable) {
-    return baseTransactionRepository.findAll(pageable).map(bt -> modelMapper.map(bt, TransactionGetDTO.class));
+    return baseTransactionRepository
+        .findAll(pageable)
+        .map(bt -> modelMapper.map(bt, TransactionGetDTO.class));
   }
 
   @Override
   public Optional<TransactionGetDTO> getTransaction(UUID transactionId) {
-    return baseTransactionRepository.findById(transactionId).map(bt -> modelMapper.map(bt, TransactionGetDTO.class));
+    return baseTransactionRepository
+        .findById(transactionId)
+        .map(bt -> modelMapper.map(bt, TransactionGetDTO.class));
   }
 
   @Override
