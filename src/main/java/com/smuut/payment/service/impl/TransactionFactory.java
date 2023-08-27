@@ -1,10 +1,11 @@
 package com.smuut.payment.service.impl;
 
-import com.smuut.payment.dto.TransactionCreateDTO;
+import com.smuut.payment.dto.*;
 import com.smuut.payment.entity.*;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -20,22 +21,23 @@ public class TransactionFactory {
 
   private final ReversalTransactionService reversalTransactionService;
 
-  /** That looks weird I know. Boxing does not work in generics. */
-  Optional<BaseTransaction> createTransaction(TransactionCreateDTO transactionCreateDTO) {
+  private final ModelMapper modelMapper;
+
+  Optional<TransactionGetDTO> createTransaction(TransactionCreateDTO transactionCreateDTO) {
 
     return switch (transactionCreateDTO.getType()) {
       case AUTHORIZE -> authorizeTransactionService
           .createTransactionInternal(transactionCreateDTO)
-          .map(at -> at);
+          .map(at -> modelMapper.map(at, AuthorizeTransactionGetDTO.class));
       case CHARGE -> chargeTransactionService
           .createTransactionInternal(transactionCreateDTO)
-          .map(at -> at);
+          .map(ct -> modelMapper.map(ct, ChargeTransactionGetDTO.class));
       case REFUND -> refundTransactionService
           .createTransactionInternal(transactionCreateDTO)
-          .map(at -> at);
+          .map(rt -> modelMapper.map(rt, RefundTransactionGetDTO.class));
       case REVERSAL -> reversalTransactionService
           .createTransactionInternal(transactionCreateDTO)
-          .map(at -> at);
+          .map(rt -> modelMapper.map(rt, ReversalTransactionGetDTO.class));
     };
   }
 }

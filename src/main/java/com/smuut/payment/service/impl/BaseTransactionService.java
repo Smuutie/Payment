@@ -3,10 +3,10 @@ package com.smuut.payment.service.impl;
 import com.smuut.payment.dto.TransactionCreateDTO;
 import com.smuut.payment.dto.TransactionGetDTO;
 import com.smuut.payment.service.TransactionService;
-import java.util.Collection;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +18,11 @@ public class BaseTransactionService implements TransactionService<TransactionGet
 
   @Override
   public Optional<TransactionGetDTO> createTransaction(TransactionCreateDTO transactionCreateDTO) {
-    throw new UnsupportedOperationException();
+    return transactionFactory.createTransaction(transactionCreateDTO);
   }
 
   @Override
-  public Collection<TransactionGetDTO> getTransactions(Pageable pageable) {
+  public Page<TransactionGetDTO> getTransactions(Pageable pageable) {
     throw new UnsupportedOperationException();
   }
 

@@ -19,7 +19,7 @@ import org.hibernate.type.SqlTypes;
 @Table(name = "transaction")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "transaction_type")
-public abstract class BaseTransaction {
+public class BaseTransaction {
 
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)

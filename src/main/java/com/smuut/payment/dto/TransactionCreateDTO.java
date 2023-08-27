@@ -22,4 +22,8 @@ public class TransactionCreateDTO {
   @NotEmpty
   @Pattern(regexp = "(\\+\\d{3}|0{1})\\d{9}")
   private String customerPhone;
+
+  private UUID targetTransaction;
+
+  private Double amount;
 }

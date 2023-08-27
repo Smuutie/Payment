@@ -2,13 +2,16 @@ package com.smuut.payment.service.impl;
 
 import com.smuut.payment.dto.MerchantCreateDTO;
 import com.smuut.payment.dto.MerchantGetDTO;
+import com.smuut.payment.entity.Merchant;
 import com.smuut.payment.repository.MerchantRepository;
 import com.smuut.payment.service.MerchantService;
-import java.util.Collection;
+import jakarta.validation.Validator;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -19,23 +22,39 @@ public class MerchantServiceImpl implements MerchantService {
 
   private final MerchantRepository merchantRepository;
 
+  private final Validator validator;
+
+  private final ModelMapper modelMapper;
+
   @Override
   public Optional<MerchantGetDTO> createMerchant(MerchantCreateDTO merchantCreateDTO) {
-    throw new UnsupportedOperationException();
+    final var merchantEntity = modelMapper.map(merchantCreateDTO, Merchant.class);
+    if (!validator.validate(merchantEntity).isEmpty()) {
+      return Optional.empty();
+    }
+    return Optional.of(merchantRepository.save(merchantEntity))
+        .map(m -> modelMapper.map(m, MerchantGetDTO.class));
   }
 
   @Override
-  public Collection<MerchantGetDTO> getMerchants(Pageable pageable) {
-    throw new UnsupportedOperationException();
+  public Page<MerchantGetDTO> getMerchants(Pageable pageable) {
+    return merchantRepository.findAll(pageable).map(m -> modelMapper.map(m, MerchantGetDTO.class));
   }
 
   @Override
   public Optional<MerchantGetDTO> getMerchant(UUID merchantId) {
-    throw new UnsupportedOperationException();
+    return merchantRepository
+        .findById(merchantId)
+        .map(m -> modelMapper.map(m, MerchantGetDTO.class));
   }
 
   @Override
   public boolean deleteMerchant(UUID merchantId) {
-    throw new UnsupportedOperationException();
+    final var optionalMerchant = merchantRepository.findById(merchantId);
+    if (optionalMerchant.isEmpty() || !optionalMerchant.get().getTransactions().isEmpty()) {
+      return false;
+    }
+    merchantRepository.delete(optionalMerchant.get());
+    return true;
   }
 }
