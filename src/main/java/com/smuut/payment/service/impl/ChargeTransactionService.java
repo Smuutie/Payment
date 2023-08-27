@@ -3,6 +3,7 @@ package com.smuut.payment.service.impl;
 import com.smuut.payment.dto.ChargeTransactionGetDTO;
 import com.smuut.payment.dto.TransactionCreateDTO;
 import com.smuut.payment.entity.ChargeTransaction;
+import com.smuut.payment.entity.TransactionStatus;
 import com.smuut.payment.repository.ChargeTransactionRepository;
 import com.smuut.payment.service.TransactionService;
 import jakarta.validation.Validator;
@@ -35,6 +36,11 @@ public class ChargeTransactionService implements TransactionService<ChargeTransa
     final var chargeTransaction = modelMapper.map(transactionCreateDTO, ChargeTransaction.class);
     if (!validator.validate(chargeTransaction).isEmpty()) {
       return Optional.empty();
+    }
+    if(!chargeTransaction.getAuthorizeTransaction().getTransactionStatus().equals(TransactionStatus.APPROVED)){
+      chargeTransaction.setTransactionStatus(TransactionStatus.ERROR);
+    } else {
+      chargeTransaction.setTransactionStatus(TransactionStatus.APPROVED);
     }
     return Optional.of(chargeTransactionRepository.save(chargeTransaction));
   }

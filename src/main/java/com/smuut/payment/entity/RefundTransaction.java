@@ -12,7 +12,7 @@ import lombok.EqualsAndHashCode;
 public class RefundTransaction extends BaseTransaction {
 
   @NotNull
-  @OneToOne(mappedBy = "refundTransaction", fetch = FetchType.EAGER, optional = false)
+  @OneToOne(mappedBy = "refundTransaction", fetch = FetchType.EAGER, optional = false, cascade = CascadeType.ALL)
   private ChargeTransaction chargeTransaction;
 
   @NotNull

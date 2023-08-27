@@ -3,6 +3,7 @@ package com.smuut.payment.service.impl;
 import com.smuut.payment.dto.ReversalTransactionGetDTO;
 import com.smuut.payment.dto.TransactionCreateDTO;
 import com.smuut.payment.entity.ReversalTransaction;
+import com.smuut.payment.entity.TransactionStatus;
 import com.smuut.payment.repository.ReversalTransactionRepository;
 import com.smuut.payment.service.TransactionService;
 import jakarta.validation.Validator;
@@ -33,11 +34,18 @@ public class ReversalTransactionService implements TransactionService<ReversalTr
 
   Optional<ReversalTransaction> createTransactionInternal(
       TransactionCreateDTO transactionCreateDTO) {
-    final var refundTransaction = modelMapper.map(transactionCreateDTO, ReversalTransaction.class);
-    if (!validator.validate(refundTransaction).isEmpty()) {
+    final var reversalTransaction = modelMapper.map(transactionCreateDTO, ReversalTransaction.class);
+    if (!validator.validate(reversalTransaction).isEmpty()) {
       return Optional.empty();
     }
-    return Optional.of(reversalTransactionRepository.save(refundTransaction));
+    final var referencedAuthorizeTransaction = reversalTransaction.getAuthorizeTransaction();
+    if(!referencedAuthorizeTransaction.getTransactionStatus().equals(TransactionStatus.APPROVED)){
+      reversalTransaction.setTransactionStatus(TransactionStatus.ERROR);
+    } else {
+      reversalTransaction.setTransactionStatus(TransactionStatus.APPROVED);
+      referencedAuthorizeTransaction.setTransactionStatus(TransactionStatus.REVERSED);
+    }
+    return Optional.of(reversalTransactionRepository.save(reversalTransaction));
   }
 
   @Override

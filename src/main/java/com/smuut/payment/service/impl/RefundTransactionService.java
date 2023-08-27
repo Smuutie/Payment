@@ -3,6 +3,7 @@ package com.smuut.payment.service.impl;
 import com.smuut.payment.dto.RefundTransactionGetDTO;
 import com.smuut.payment.dto.TransactionCreateDTO;
 import com.smuut.payment.entity.RefundTransaction;
+import com.smuut.payment.entity.TransactionStatus;
 import com.smuut.payment.repository.RefundTransactionRepository;
 import com.smuut.payment.service.TransactionService;
 import jakarta.validation.Validator;
@@ -35,6 +36,14 @@ public class RefundTransactionService implements TransactionService<RefundTransa
     final var refundTransaction = modelMapper.map(transactionCreateDTO, RefundTransaction.class);
     if (!validator.validate(refundTransaction).isEmpty()) {
       return Optional.empty();
+    }
+    final var referencedChargeTransaction = refundTransaction.getChargeTransaction();
+    if(!referencedChargeTransaction.getTransactionStatus().equals(TransactionStatus.APPROVED)){
+      refundTransaction.setTransactionStatus(TransactionStatus.ERROR);
+    } else {
+      refundTransaction.setTransactionStatus(TransactionStatus.APPROVED);
+      referencedChargeTransaction.setTransactionStatus(TransactionStatus.REFUNDED);
+      referencedChargeTransaction.getAuthorizeTransaction().setTransactionStatus(TransactionStatus.REFUNDED);
     }
     return Optional.of(refundTransactionRepository.save(refundTransaction));
   }
