@@ -4,7 +4,7 @@ import com.smuut.payment.dto.MerchantCreateDTO;
 import com.smuut.payment.dto.MerchantGetDTO;
 import com.smuut.payment.service.MerchantService;
 import jakarta.validation.Valid;
-import jakarta.websocket.server.PathParam;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,32 +13,43 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
-
 @RestController
 @RequestMapping("/merchant")
 @RequiredArgsConstructor
 public class MerchantController {
 
-    private final MerchantService merchantService;
+  private final MerchantService merchantService;
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<Page<MerchantGetDTO>> getMerchants(@PageableDefault(size = 100) Pageable pageable){
-        return ResponseEntity.ok(merchantService.getMerchants(pageable));
-    }
+  @GetMapping(
+      produces = MediaType.APPLICATION_JSON_VALUE,
+      consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+  public ResponseEntity<Page<MerchantGetDTO>> getMerchants(
+      @PageableDefault(size = 100) Pageable pageable) {
+    return ResponseEntity.ok(merchantService.getMerchants(pageable));
+  }
 
-    @GetMapping(path = "/{merchantId}", produces = MediaType.APPLICATION_JSON_VALUE, consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<MerchantGetDTO> getMerchant(@PathVariable("merchantId") UUID merchantId){
-        return ResponseEntity.of(merchantService.getMerchant(merchantId));
-    }
+  @GetMapping(
+      path = "/{merchantId}",
+      produces = MediaType.APPLICATION_JSON_VALUE,
+      consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+  public ResponseEntity<MerchantGetDTO> getMerchant(@PathVariable("merchantId") UUID merchantId) {
+    return ResponseEntity.of(merchantService.getMerchant(merchantId));
+  }
 
-    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<MerchantGetDTO> createMerchant(@Valid @RequestBody MerchantCreateDTO merchantCreateDTO){
-        return ResponseEntity.of(merchantService.createMerchant(merchantCreateDTO));
-    }
+  @PostMapping(
+      produces = MediaType.APPLICATION_JSON_VALUE,
+      consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+  public ResponseEntity<MerchantGetDTO> createMerchant(
+      @Valid @RequestBody MerchantCreateDTO merchantCreateDTO) {
+    return ResponseEntity.of(merchantService.createMerchant(merchantCreateDTO));
+  }
 
-    @DeleteMapping(path = "/{merchantId}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public ResponseEntity<Void> deleteMerchant(@PathVariable("merchantId") UUID merchantId){
-        return merchantService.deleteMerchant(merchantId) ? ResponseEntity.ok().build() : ResponseEntity.badRequest().build();
-    }
+  @DeleteMapping(
+      path = "/{merchantId}",
+      consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+  public ResponseEntity<Void> deleteMerchant(@PathVariable("merchantId") UUID merchantId) {
+    return merchantService.deleteMerchant(merchantId)
+        ? ResponseEntity.ok().build()
+        : ResponseEntity.badRequest().build();
+  }
 }
