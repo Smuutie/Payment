@@ -1,3 +1,12 @@
 package com.smuut.payment.dto;
 
-public class AuthorizeTransactionGetDTO extends TransactionGetDTO {}
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class AuthorizeTransactionGetDTO extends TransactionGetDTO {
+
+  @NotNull private Double amount;
+}

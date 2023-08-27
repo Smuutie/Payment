@@ -39,7 +39,7 @@ public class Merchant {
   @Email private String email;
 
   @Formula(
-      "(SELECT SUM(ct.amount) FROM charge_transaction ct WHERE ct.status='APPROVED' AND ct.merchant_id=id )")
+      "(SELECT SUM(t.amount) FROM transaction t WHERE t.status='APPROVED' AND t.merchant_id=id AND t.transaction_type='Charge')")
   private Double totalTransactionSum;
 
   @OneToMany(mappedBy = "merchant", fetch = FetchType.LAZY)
