@@ -2,10 +2,12 @@ package com.smuut.payment.service.impl;
 
 import com.smuut.payment.dto.TransactionCreateDTO;
 import com.smuut.payment.dto.TransactionGetDTO;
+import com.smuut.payment.repository.BaseTransactionRepository;
 import com.smuut.payment.service.TransactionService;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,6 +18,10 @@ public class BaseTransactionService implements TransactionService<TransactionGet
 
   private final TransactionFactory transactionFactory;
 
+  private final BaseTransactionRepository baseTransactionRepository;
+
+  private final ModelMapper modelMapper;
+
   @Override
   public Optional<TransactionGetDTO> createTransaction(TransactionCreateDTO transactionCreateDTO) {
     return transactionFactory.createTransaction(transactionCreateDTO);
@@ -23,16 +29,21 @@ public class BaseTransactionService implements TransactionService<TransactionGet
 
   @Override
   public Page<TransactionGetDTO> getTransactions(Pageable pageable) {
-    throw new UnsupportedOperationException();
+    return baseTransactionRepository.findAll(pageable).map(bt -> modelMapper.map(bt, TransactionGetDTO.class));
   }
 
   @Override
   public Optional<TransactionGetDTO> getTransaction(UUID transactionId) {
-    throw new UnsupportedOperationException();
+    return baseTransactionRepository.findById(transactionId).map(bt -> modelMapper.map(bt, TransactionGetDTO.class));
   }
 
   @Override
   public boolean deleteTransaction(UUID transactionId) {
-    throw new UnsupportedOperationException();
+    final var baseTransaction = baseTransactionRepository.findById(transactionId);
+    if (baseTransaction.isEmpty()) {
+      return false;
+    }
+    baseTransactionRepository.delete(baseTransaction.get());
+    return true;
   }
 }
