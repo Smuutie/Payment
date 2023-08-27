@@ -31,7 +31,7 @@ public class BaseTransaction {
   @CreationTimestamp
   private OffsetDateTime createdAt;
 
-  @Email private String customerEmail;
+  @NotEmpty @Email private String customerEmail;
 
   @NotEmpty
   @Pattern(regexp = "(\\+\\d{3}|0{1})\\d{9}")
