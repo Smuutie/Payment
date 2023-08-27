@@ -1,0 +1,15 @@
+server:
+  port: 9080
+
+spring:
+  docker:
+    compose:
+      file: docker-compose.yaml
+  jpa:
+    show-sql: false
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: validate
+  liquibase:
+    change-log: classpath:db/changelog.xml
+    enabled: true
