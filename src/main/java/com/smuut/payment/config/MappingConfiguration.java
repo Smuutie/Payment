@@ -1,4 +1,4 @@
-package com.smuut.payment.config.mapping;
+package com.smuut.payment.config;
 
 import org.modelmapper.ModelMapper;
 

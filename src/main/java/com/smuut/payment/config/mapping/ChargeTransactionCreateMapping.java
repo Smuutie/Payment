@@ -1,5 +1,6 @@
 package com.smuut.payment.config.mapping;
 
+import com.smuut.payment.config.MappingConfiguration;
 import com.smuut.payment.dto.TransactionCreateDTO;
 import com.smuut.payment.entity.AuthorizeTransaction;
 import com.smuut.payment.entity.ChargeTransaction;
@@ -31,20 +32,22 @@ public class ChargeTransactionCreateMapping implements MappingConfiguration {
     final Converter<UUID, AuthorizeTransaction> pkToAuthorizeTransactionConverter =
         context -> authorizeTransactionRepository.findById(context.getSource()).orElse(null);
 
-    typemap.addMappings(
-        context -> {
-          context.skip(ChargeTransaction::setId);
-          context.skip(ChargeTransaction::setCreatedAt);
-          context
-              .when(Conditions.isNotNull())
-              .using(pkToMerchantConverter)
-              .map(TransactionCreateDTO::getMerchantId, ChargeTransaction::setMerchant);
-          context
-              .when(Conditions.isNotNull())
-              .using(pkToAuthorizeTransactionConverter)
-              .map(
-                  TransactionCreateDTO::getTargetTransaction,
-                  ChargeTransaction::setAuthorizeTransaction);
-        });
+    typemap
+        .addMappings(
+            context -> {
+              context.skip(ChargeTransaction::setId);
+              context.skip(ChargeTransaction::setCreatedAt);
+              context
+                  .when(Conditions.isNotNull())
+                  .using(pkToMerchantConverter)
+                  .map(TransactionCreateDTO::getMerchantId, ChargeTransaction::setMerchant);
+              context
+                  .when(Conditions.isNotNull())
+                  .using(pkToAuthorizeTransactionConverter)
+                  .map(
+                      TransactionCreateDTO::getTargetTransaction,
+                      ChargeTransaction::setAuthorizeTransaction);
+            })
+        .implicitMappings();
   }
 }

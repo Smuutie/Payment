@@ -1,5 +1,6 @@
 package com.smuut.payment.config.mapping;
 
+import com.smuut.payment.config.MappingConfiguration;
 import com.smuut.payment.dto.TransactionCreateDTO;
 import com.smuut.payment.entity.ChargeTransaction;
 import com.smuut.payment.entity.Merchant;
@@ -31,20 +32,22 @@ public class RefundTransactionCreateMapping implements MappingConfiguration {
     final Converter<UUID, ChargeTransaction> pkToChargeTransactionConverter =
         context -> chargeTransactionRepository.findById(context.getSource()).orElse(null);
 
-    typemap.addMappings(
-        context -> {
-          context.skip(RefundTransaction::setId);
-          context.skip(RefundTransaction::setCreatedAt);
-          context
-              .when(Conditions.isNotNull())
-              .using(pkToMerchantConverter)
-              .map(TransactionCreateDTO::getMerchantId, RefundTransaction::setMerchant);
-          context
-              .when(Conditions.isNotNull())
-              .using(pkToChargeTransactionConverter)
-              .map(
-                  TransactionCreateDTO::getTargetTransaction,
-                  RefundTransaction::setChargeTransaction);
-        });
+    typemap
+        .addMappings(
+            context -> {
+              context.skip(RefundTransaction::setId);
+              context.skip(RefundTransaction::setCreatedAt);
+              context
+                  .when(Conditions.isNotNull())
+                  .using(pkToMerchantConverter)
+                  .map(TransactionCreateDTO::getMerchantId, RefundTransaction::setMerchant);
+              context
+                  .when(Conditions.isNotNull())
+                  .using(pkToChargeTransactionConverter)
+                  .map(
+                      TransactionCreateDTO::getTargetTransaction,
+                      RefundTransaction::setChargeTransaction);
+            })
+        .implicitMappings();
   }
 }

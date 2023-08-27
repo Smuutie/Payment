@@ -1,5 +1,6 @@
 package com.smuut.payment.config.mapping;
 
+import com.smuut.payment.config.MappingConfiguration;
 import com.smuut.payment.dto.MerchantCreateDTO;
 import com.smuut.payment.entity.Merchant;
 import org.modelmapper.ModelMapper;
@@ -19,12 +20,14 @@ public class MerchantCreateDTOMapping implements MappingConfiguration {
           return merchant;
         });
 
-    typemap.addMappings(
-        context -> {
-          context.skip(Merchant::setId);
-          context.skip(Merchant::setTransactions);
-          context.skip(Merchant::setTotalTransactionSum);
-          context.skip(Merchant::setCreatedAt);
-        });
+    typemap
+        .addMappings(
+            context -> {
+              context.skip(Merchant::setId);
+              context.skip(Merchant::setTransactions);
+              context.skip(Merchant::setTotalTransactionSum);
+              context.skip(Merchant::setCreatedAt);
+            })
+        .implicitMappings();
   }
 }

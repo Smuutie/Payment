@@ -1,5 +1,6 @@
 package com.smuut.payment.config.mapping;
 
+import com.smuut.payment.config.MappingConfiguration;
 import com.smuut.payment.dto.RefundTransactionGetDTO;
 import com.smuut.payment.entity.ChargeTransaction;
 import com.smuut.payment.entity.RefundTransaction;
@@ -14,12 +15,15 @@ public class RefundTransactionGetDTOMapping implements MappingConfiguration {
   @Override
   public void configure(ModelMapper modelMapper) {
     final var typeMap = modelMapper.typeMap(RefundTransaction.class, RefundTransactionGetDTO.class);
-    typeMap.addMappings(
-        mapping ->
-            mapping
-                .using((Converter<ChargeTransaction, UUID>) context -> context.getSource().getId())
-                .map(
-                    RefundTransaction::getChargeTransaction,
-                    RefundTransactionGetDTO::setChargeTransactionId));
+    typeMap
+        .addMappings(
+            mapping ->
+                mapping
+                    .using(
+                        (Converter<ChargeTransaction, UUID>) context -> context.getSource().getId())
+                    .map(
+                        RefundTransaction::getChargeTransaction,
+                        RefundTransactionGetDTO::setChargeTransactionId))
+        .implicitMappings();
   }
 }
