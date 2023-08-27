@@ -7,7 +7,9 @@ import static org.mockito.Mockito.when;
 
 import com.smuut.payment.dto.ReversalTransactionGetDTO;
 import com.smuut.payment.dto.TransactionCreateDTO;
+import com.smuut.payment.entity.AuthorizeTransaction;
 import com.smuut.payment.entity.ReversalTransaction;
+import com.smuut.payment.entity.TransactionStatus;
 import com.smuut.payment.repository.ReversalTransactionRepository;
 import jakarta.validation.Validator;
 import java.util.HashSet;
@@ -38,7 +40,10 @@ public class ReversalTransactionServiceTest {
   @Test
   public void whenCreateReversalTransactionIsCalled_ThenReturnReversalTransactionGetDTO() {
     final var createTransactionDTO = TransactionCreateDTO.builder().build();
-    final var transactionEntity = Mockito.mock(ReversalTransaction.class);
+    final var transactionEntity = new ReversalTransaction();
+    final var authTransaction = new AuthorizeTransaction();
+    authTransaction.setTransactionStatus(TransactionStatus.APPROVED);
+    transactionEntity.setAuthorizeTransaction(authTransaction);
     Mockito.when(reversalTransactionRepository.save(any())).thenReturn(transactionEntity);
     when(modelMapper.map(createTransactionDTO, ReversalTransaction.class))
         .thenReturn(transactionEntity);

@@ -38,6 +38,8 @@ public class Merchant {
 
   @Email private String email;
 
+  private boolean active;
+
   @Formula(
       "(SELECT SUM(t.amount) FROM transaction t WHERE t.status='APPROVED' AND t.merchant_id=id AND t.transaction_type='Charge')")
   private Double totalTransactionSum;

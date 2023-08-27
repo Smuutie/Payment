@@ -10,5 +10,6 @@
     <include file="changesets/transactions/refund-transaction-01.xml" relativeToChangelogFile="true"/>
     <include file="changesets/transactions/reversal-transaction-01.xml" relativeToChangelogFile="true"/>
     <include file="changesets/merchants/merchants-02.xml" relativeToChangelogFile="true"/>
+    <include file="changesets/merchants/merchants-03.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

@@ -12,6 +12,13 @@ public class MerchantCreateDTOMapping implements MappingConfiguration {
   public void configure(ModelMapper modelMapper) {
     final var typemap = modelMapper.typeMap(MerchantCreateDTO.class, Merchant.class);
 
+    typemap.setProvider(
+        request -> {
+          final var merchant = new Merchant();
+          merchant.setActive(true);
+          return merchant;
+        });
+
     typemap.addMappings(
         context -> {
           context.skip(Merchant::setId);
