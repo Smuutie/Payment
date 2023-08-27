@@ -7,7 +7,9 @@ import static org.mockito.Mockito.when;
 
 import com.smuut.payment.dto.ChargeTransactionGetDTO;
 import com.smuut.payment.dto.TransactionCreateDTO;
+import com.smuut.payment.entity.AuthorizeTransaction;
 import com.smuut.payment.entity.ChargeTransaction;
+import com.smuut.payment.entity.TransactionStatus;
 import com.smuut.payment.repository.ChargeTransactionRepository;
 import jakarta.validation.Validator;
 import java.util.HashSet;
@@ -38,7 +40,10 @@ public class ChargeTransactionServiceTest {
   @Test
   public void whenCreateChargeTransactionIsCalled_ThenReturnChargeTransactionGetDTO() {
     final var createTransactionDTO = TransactionCreateDTO.builder().build();
-    final var transactionEntity = Mockito.mock(ChargeTransaction.class);
+    final var transactionEntity = new ChargeTransaction();
+    final var authTransaction = new AuthorizeTransaction();
+    authTransaction.setTransactionStatus(TransactionStatus.APPROVED);
+    transactionEntity.setAuthorizeTransaction(authTransaction);
     Mockito.when(chargeTransactionRepository.save(any())).thenReturn(transactionEntity);
     when(modelMapper.map(createTransactionDTO, ChargeTransaction.class))
         .thenReturn(transactionEntity);

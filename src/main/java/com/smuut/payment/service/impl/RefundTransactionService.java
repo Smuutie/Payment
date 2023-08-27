@@ -38,12 +38,14 @@ public class RefundTransactionService implements TransactionService<RefundTransa
       return Optional.empty();
     }
     final var referencedChargeTransaction = refundTransaction.getChargeTransaction();
-    if(!referencedChargeTransaction.getTransactionStatus().equals(TransactionStatus.APPROVED)){
+    if (!referencedChargeTransaction.getTransactionStatus().equals(TransactionStatus.APPROVED)) {
       refundTransaction.setTransactionStatus(TransactionStatus.ERROR);
     } else {
       refundTransaction.setTransactionStatus(TransactionStatus.APPROVED);
       referencedChargeTransaction.setTransactionStatus(TransactionStatus.REFUNDED);
-      referencedChargeTransaction.getAuthorizeTransaction().setTransactionStatus(TransactionStatus.REFUNDED);
+      referencedChargeTransaction
+          .getAuthorizeTransaction()
+          .setTransactionStatus(TransactionStatus.REFUNDED);
     }
     return Optional.of(refundTransactionRepository.save(refundTransaction));
   }

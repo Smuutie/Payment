@@ -37,7 +37,10 @@ public class ChargeTransactionService implements TransactionService<ChargeTransa
     if (!validator.validate(chargeTransaction).isEmpty()) {
       return Optional.empty();
     }
-    if(!chargeTransaction.getAuthorizeTransaction().getTransactionStatus().equals(TransactionStatus.APPROVED)){
+    if (!chargeTransaction
+        .getAuthorizeTransaction()
+        .getTransactionStatus()
+        .equals(TransactionStatus.APPROVED)) {
       chargeTransaction.setTransactionStatus(TransactionStatus.ERROR);
     } else {
       chargeTransaction.setTransactionStatus(TransactionStatus.APPROVED);

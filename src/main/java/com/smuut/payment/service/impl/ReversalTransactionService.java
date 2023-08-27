@@ -34,12 +34,13 @@ public class ReversalTransactionService implements TransactionService<ReversalTr
 
   Optional<ReversalTransaction> createTransactionInternal(
       TransactionCreateDTO transactionCreateDTO) {
-    final var reversalTransaction = modelMapper.map(transactionCreateDTO, ReversalTransaction.class);
+    final var reversalTransaction =
+        modelMapper.map(transactionCreateDTO, ReversalTransaction.class);
     if (!validator.validate(reversalTransaction).isEmpty()) {
       return Optional.empty();
     }
     final var referencedAuthorizeTransaction = reversalTransaction.getAuthorizeTransaction();
-    if(!referencedAuthorizeTransaction.getTransactionStatus().equals(TransactionStatus.APPROVED)){
+    if (!referencedAuthorizeTransaction.getTransactionStatus().equals(TransactionStatus.APPROVED)) {
       reversalTransaction.setTransactionStatus(TransactionStatus.ERROR);
     } else {
       reversalTransaction.setTransactionStatus(TransactionStatus.APPROVED);
