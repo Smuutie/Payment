@@ -1,5 +1,6 @@
 package com.smuut.payment.config.mapping;
 
+import com.smuut.payment.config.MappingConfiguration;
 import com.smuut.payment.dto.TransactionCreateDTO;
 import com.smuut.payment.entity.AuthorizeTransaction;
 import com.smuut.payment.entity.Merchant;
@@ -32,14 +33,16 @@ public class AuthorizeTransactionCreateMapping implements MappingConfiguration {
     final Converter<UUID, Merchant> pkToMerchantConverter =
         context -> merchantRepository.findById(context.getSource()).orElse(null);
 
-    typemap.addMappings(
-        context -> {
-          context.skip(AuthorizeTransaction::setId);
-          context.skip(AuthorizeTransaction::setCreatedAt);
-          context
-              .when(Conditions.isNotNull())
-              .using(pkToMerchantConverter)
-              .map(TransactionCreateDTO::getMerchantId, AuthorizeTransaction::setMerchant);
-        });
+    typemap
+        .addMappings(
+            context -> {
+              context.skip(AuthorizeTransaction::setId);
+              context.skip(AuthorizeTransaction::setCreatedAt);
+              context
+                  .when(Conditions.isNotNull())
+                  .using(pkToMerchantConverter)
+                  .map(TransactionCreateDTO::getMerchantId, AuthorizeTransaction::setMerchant);
+            })
+        .implicitMappings();
   }
 }

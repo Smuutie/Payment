@@ -1,4 +1,4 @@
-package com.smuut.payment.config.mapping;
+package com.smuut.payment.config;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +15,7 @@ public class ModelMapperConfig {
   @Bean
   public ModelMapper createModelMapper() {
     final var modelMapper = new ModelMapper();
+    modelMapper.getConfiguration().setImplicitMappingEnabled(false);
     configurations.forEach(config -> config.configure(modelMapper));
     return modelMapper;
   }

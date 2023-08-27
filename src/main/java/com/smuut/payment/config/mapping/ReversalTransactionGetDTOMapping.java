@@ -1,5 +1,6 @@
 package com.smuut.payment.config.mapping;
 
+import com.smuut.payment.config.MappingConfiguration;
 import com.smuut.payment.dto.ReversalTransactionGetDTO;
 import com.smuut.payment.entity.AuthorizeTransaction;
 import com.smuut.payment.entity.ReversalTransaction;
@@ -15,13 +16,16 @@ public class ReversalTransactionGetDTOMapping implements MappingConfiguration {
   public void configure(ModelMapper modelMapper) {
     final var typemap =
         modelMapper.typeMap(ReversalTransaction.class, ReversalTransactionGetDTO.class);
-    typemap.addMappings(
-        mapping ->
-            mapping
-                .using(
-                    (Converter<AuthorizeTransaction, UUID>) context -> context.getSource().getId())
-                .map(
-                    ReversalTransaction::getAuthorizeTransaction,
-                    ReversalTransactionGetDTO::setAuthorizeTransactionId));
+    typemap
+        .addMappings(
+            mapping ->
+                mapping
+                    .using(
+                        (Converter<AuthorizeTransaction, UUID>)
+                            context -> context.getSource().getId())
+                    .map(
+                        ReversalTransaction::getAuthorizeTransaction,
+                        ReversalTransactionGetDTO::setAuthorizeTransactionId))
+        .implicitMappings();
   }
 }

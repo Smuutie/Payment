@@ -1,5 +1,6 @@
 package com.smuut.payment.config.mapping;
 
+import com.smuut.payment.config.MappingConfiguration;
 import com.smuut.payment.dto.TransactionCreateDTO;
 import com.smuut.payment.entity.*;
 import com.smuut.payment.repository.AuthorizeTransactionRepository;
@@ -29,20 +30,22 @@ public class ReversalTransactionCreateMapping implements MappingConfiguration {
     final Converter<UUID, AuthorizeTransaction> pkToAuthorizeTransactionConverter =
         context -> authorizeTransactionRepository.findById(context.getSource()).orElse(null);
 
-    typemap.addMappings(
-        context -> {
-          context.skip(ReversalTransaction::setId);
-          context.skip(ReversalTransaction::setCreatedAt);
-          context
-              .when(Conditions.isNotNull())
-              .using(pkToMerchantConverter)
-              .map(TransactionCreateDTO::getMerchantId, ReversalTransaction::setMerchant);
-          context
-              .when(Conditions.isNotNull())
-              .using(pkToAuthorizeTransactionConverter)
-              .map(
-                  TransactionCreateDTO::getTargetTransaction,
-                  ReversalTransaction::setAuthorizeTransaction);
-        });
+    typemap
+        .addMappings(
+            context -> {
+              context.skip(ReversalTransaction::setId);
+              context.skip(ReversalTransaction::setCreatedAt);
+              context
+                  .when(Conditions.isNotNull())
+                  .using(pkToMerchantConverter)
+                  .map(TransactionCreateDTO::getMerchantId, ReversalTransaction::setMerchant);
+              context
+                  .when(Conditions.isNotNull())
+                  .using(pkToAuthorizeTransactionConverter)
+                  .map(
+                      TransactionCreateDTO::getTargetTransaction,
+                      ReversalTransaction::setAuthorizeTransaction);
+            })
+        .implicitMappings();
   }
 }
