@@ -1,4 +1,4 @@
-package com.smuut.payment.config.mapping;
+package com.smuut.payment.config.mapping.merchant;
 
 import com.smuut.payment.config.MappingConfiguration;
 import com.smuut.payment.dto.MerchantGetDTO;
