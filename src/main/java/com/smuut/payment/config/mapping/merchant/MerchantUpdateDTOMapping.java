@@ -3,6 +3,7 @@ package com.smuut.payment.config.mapping.merchant;
 import com.smuut.payment.config.MappingConfiguration;
 import com.smuut.payment.dto.MerchantUpdateDTO;
 import com.smuut.payment.entity.Merchant;
+import org.modelmapper.Conditions;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
@@ -20,9 +21,15 @@ public class MerchantUpdateDTOMapping implements MappingConfiguration {
               context.skip(Merchant::setTransactions);
               context.skip(Merchant::setTotalTransactionSum);
               context.skip(Merchant::setCreatedAt);
-              context.map(MerchantUpdateDTO::getName, Merchant::setName);
-              context.map(MerchantUpdateDTO::getDescription, Merchant::setDescription);
-              context.map(MerchantUpdateDTO::getEmail, Merchant::setEmail);
+              context
+                  .when(Conditions.isNotNull())
+                  .map(MerchantUpdateDTO::getName, Merchant::setName);
+              context
+                  .when(Conditions.isNotNull())
+                  .map(MerchantUpdateDTO::getDescription, Merchant::setDescription);
+              context
+                  .when(Conditions.isNotNull())
+                  .map(MerchantUpdateDTO::getEmail, Merchant::setEmail);
             })
         .implicitMappings();
   }
