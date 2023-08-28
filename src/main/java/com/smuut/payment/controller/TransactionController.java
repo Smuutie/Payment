@@ -25,7 +25,7 @@ public class TransactionController {
       produces = MediaType.APPLICATION_JSON_VALUE,
       consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
   public ResponseEntity<Page<TransactionGetDTO>> getTransactions(
-          @ParameterObject @PageableDefault(size = 100) Pageable pageable) {
+      @ParameterObject @PageableDefault(size = 100) Pageable pageable) {
     return ResponseEntity.ok(transactionService.getTransactions(pageable));
   }
 

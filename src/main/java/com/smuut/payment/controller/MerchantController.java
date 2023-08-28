@@ -25,7 +25,7 @@ public class MerchantController {
       produces = MediaType.APPLICATION_JSON_VALUE,
       consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
   public ResponseEntity<Page<MerchantGetDTO>> getMerchants(
-          @ParameterObject @PageableDefault(size = 100) Pageable pageable) {
+      @ParameterObject @PageableDefault(size = 100) Pageable pageable) {
     return ResponseEntity.ok(merchantService.getMerchants(pageable));
   }
 

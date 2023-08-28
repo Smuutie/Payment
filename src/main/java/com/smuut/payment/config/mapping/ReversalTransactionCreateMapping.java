@@ -3,7 +3,6 @@ package com.smuut.payment.config.mapping;
 import com.smuut.payment.config.MappingConfiguration;
 import com.smuut.payment.dto.TransactionCreateDTO;
 import com.smuut.payment.entity.*;
-import com.smuut.payment.repository.AuthorizeTransactionRepository;
 import com.smuut.payment.repository.MerchantRepository;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -18,17 +17,12 @@ public class ReversalTransactionCreateMapping implements MappingConfiguration {
 
   private final MerchantRepository merchantRepository;
 
-  private final AuthorizeTransactionRepository authorizeTransactionRepository;
-
   @Override
   public void configure(ModelMapper modelMapper) {
     final var typemap = modelMapper.typeMap(TransactionCreateDTO.class, ReversalTransaction.class);
 
     final Converter<UUID, Merchant> pkToMerchantConverter =
         context -> merchantRepository.findById(context.getSource()).orElse(null);
-
-    final Converter<UUID, AuthorizeTransaction> pkToAuthorizeTransactionConverter =
-        context -> authorizeTransactionRepository.findById(context.getSource()).orElse(null);
 
     typemap
         .addMappings(
@@ -41,10 +35,9 @@ public class ReversalTransactionCreateMapping implements MappingConfiguration {
                   .map(TransactionCreateDTO::getMerchantId, ReversalTransaction::setMerchant);
               context
                   .when(Conditions.isNotNull())
-                  .using(pkToAuthorizeTransactionConverter)
                   .map(
                       TransactionCreateDTO::getTargetTransaction,
-                      ReversalTransaction::setAuthorizeTransaction);
+                      ReversalTransaction::setAuthorizeTransactionId);
             })
         .implicitMappings();
   }

@@ -4,6 +4,8 @@ import com.smuut.payment.dto.RefundTransactionGetDTO;
 import com.smuut.payment.dto.TransactionCreateDTO;
 import com.smuut.payment.entity.RefundTransaction;
 import com.smuut.payment.entity.TransactionStatus;
+import com.smuut.payment.repository.AuthorizeTransactionRepository;
+import com.smuut.payment.repository.ChargeTransactionRepository;
 import com.smuut.payment.repository.RefundTransactionRepository;
 import com.smuut.payment.service.TransactionService;
 import jakarta.validation.Validator;
@@ -25,6 +27,10 @@ public class RefundTransactionService implements TransactionService<RefundTransa
 
   private final ModelMapper modelMapper;
 
+  private final ChargeTransactionRepository chargeTransactionRepository;
+
+  private final AuthorizeTransactionRepository authorizeTransactionRepository;
+
   @Override
   public Optional<RefundTransactionGetDTO> createTransaction(
       TransactionCreateDTO transactionCreateDTO) {
@@ -37,15 +43,33 @@ public class RefundTransactionService implements TransactionService<RefundTransa
     if (!validator.validate(refundTransaction).isEmpty()) {
       return Optional.empty();
     }
-    final var referencedChargeTransaction = refundTransaction.getChargeTransaction();
-    if (!referencedChargeTransaction.getTransactionStatus().equals(TransactionStatus.APPROVED)) {
+
+    final var optionalChargeTransaction =
+        chargeTransactionRepository.findById(refundTransaction.getChargeTransactionId());
+    if (optionalChargeTransaction.isEmpty()) {
+      return Optional.empty();
+    }
+
+    if (!optionalChargeTransaction
+        .get()
+        .getTransactionStatus()
+        .equals(TransactionStatus.APPROVED)) {
       refundTransaction.setTransactionStatus(TransactionStatus.ERROR);
     } else {
+      final var chargeTransaction = optionalChargeTransaction.get();
       refundTransaction.setTransactionStatus(TransactionStatus.APPROVED);
-      referencedChargeTransaction.setTransactionStatus(TransactionStatus.REFUNDED);
-      referencedChargeTransaction
-          .getAuthorizeTransaction()
-          .setTransactionStatus(TransactionStatus.REFUNDED);
+      chargeTransaction.setTransactionStatus(TransactionStatus.REFUNDED);
+      chargeTransactionRepository.save(chargeTransaction);
+
+      final var optionalAuthorizeTransaction =
+          authorizeTransactionRepository.findById(chargeTransaction.getAuthorizeTransactionId());
+      if (optionalChargeTransaction.isEmpty()) {
+        return Optional.empty();
+      }
+      final var authTransaction = optionalAuthorizeTransaction.get();
+
+      authTransaction.setTransactionStatus(TransactionStatus.REFUNDED);
+      authorizeTransactionRepository.save(authTransaction);
     }
     return Optional.of(refundTransactionRepository.save(refundTransaction));
   }

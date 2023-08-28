@@ -19,7 +19,7 @@ public class ChargeTransactionValidator implements Validator {
       if (Objects.isNull(chargeTransaction.getAmount())) {
         errors.rejectValue("amount", "no.amount", "Transaction cannot have amount null!");
       }
-      if (Objects.isNull(chargeTransaction.getAuthorizeTransaction())) {
+      if (Objects.isNull(chargeTransaction.getAuthorizeTransactionId())) {
         errors.rejectValue(
             "authorizeTransaction",
             "no.authorize",

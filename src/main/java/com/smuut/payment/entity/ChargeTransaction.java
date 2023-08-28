@@ -2,8 +2,11 @@ package com.smuut.payment.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import java.util.UUID;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Data
 @Entity
@@ -16,8 +19,9 @@ public class ChargeTransaction extends BaseTransaction {
   private Double amount;
 
   @NotNull
-  @OneToOne(mappedBy = "chargeTransaction", fetch = FetchType.EAGER, optional = false)
-  private AuthorizeTransaction authorizeTransaction;
+  @JdbcTypeCode(SqlTypes.CHAR)
+  @Column(name = "charge_to_authorize_transaction_id")
+  private UUID authorizeTransactionId;
 
   @OneToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(name = "charge_transaction_id")
