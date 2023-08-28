@@ -1,4 +1,4 @@
 id;admin;name;description;email;active
-1;true;admin;'Initial admin account';'admin@admin.com';true
-2;false;john;'John Doe';'john@doe.com';true
-3;false;jane;'Jane Doe';'jane@doe.com';false
+'36be6fca-4500-11ee-be56-0242ac120002';true;admin;'Initial admin account';'admin@admin.com';true
+'36be6fca-4500-11ee-be56-0242ac120003';false;john;'John Doe';'john@doe.com';true
+'36be6fca-4500-11ee-be56-0242ac120004';false;jane;'Jane Doe';'jane@doe.com';false

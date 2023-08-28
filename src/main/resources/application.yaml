@@ -13,3 +13,11 @@ spring:
   liquibase:
     change-log: classpath:db/changelog.xml
     enabled: true
+
+springdoc:
+  model-converters:
+    pageable-converter:
+      enabled: 'true'
+  swagger-ui:
+    path: /swagger-ui
+  default-produces-media-type: application/json

@@ -6,6 +6,7 @@ import com.smuut.payment.service.impl.BaseTransactionService;
 import jakarta.validation.Valid;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -24,7 +25,7 @@ public class TransactionController {
       produces = MediaType.APPLICATION_JSON_VALUE,
       consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
   public ResponseEntity<Page<TransactionGetDTO>> getTransactions(
-      @PageableDefault(size = 100) Pageable pageable) {
+          @ParameterObject @PageableDefault(size = 100) Pageable pageable) {
     return ResponseEntity.ok(transactionService.getTransactions(pageable));
   }
 
