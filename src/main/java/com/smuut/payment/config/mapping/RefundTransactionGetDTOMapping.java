@@ -2,10 +2,7 @@ package com.smuut.payment.config.mapping;
 
 import com.smuut.payment.config.MappingConfiguration;
 import com.smuut.payment.dto.RefundTransactionGetDTO;
-import com.smuut.payment.entity.ChargeTransaction;
 import com.smuut.payment.entity.RefundTransaction;
-import java.util.UUID;
-import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
@@ -18,12 +15,9 @@ public class RefundTransactionGetDTOMapping implements MappingConfiguration {
     typeMap
         .addMappings(
             mapping ->
-                mapping
-                    .using(
-                        (Converter<ChargeTransaction, UUID>) context -> context.getSource().getId())
-                    .map(
-                        RefundTransaction::getChargeTransaction,
-                        RefundTransactionGetDTO::setChargeTransactionId))
+                mapping.map(
+                    RefundTransaction::getChargeTransactionId,
+                    RefundTransactionGetDTO::setChargeTransactionId))
         .implicitMappings();
   }
 }

@@ -19,7 +19,7 @@ public class RefundTransactionValidator implements Validator {
       if (Objects.isNull(refundTransaction.getAmount())) {
         errors.rejectValue("amount", "no.amount", "Transaction cannot have amount null!");
       }
-      if (Objects.isNull(refundTransaction.getChargeTransaction())) {
+      if (Objects.isNull(refundTransaction.getChargeTransactionId())) {
         errors.rejectValue(
             "chargeTransaction",
             "no.charge",

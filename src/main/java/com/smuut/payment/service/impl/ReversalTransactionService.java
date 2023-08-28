@@ -4,6 +4,7 @@ import com.smuut.payment.dto.ReversalTransactionGetDTO;
 import com.smuut.payment.dto.TransactionCreateDTO;
 import com.smuut.payment.entity.ReversalTransaction;
 import com.smuut.payment.entity.TransactionStatus;
+import com.smuut.payment.repository.AuthorizeTransactionRepository;
 import com.smuut.payment.repository.ReversalTransactionRepository;
 import com.smuut.payment.service.TransactionService;
 import jakarta.validation.Validator;
@@ -25,6 +26,8 @@ public class ReversalTransactionService implements TransactionService<ReversalTr
 
   private final ModelMapper modelMapper;
 
+  private final AuthorizeTransactionRepository authorizeTransactionRepository;
+
   @Override
   public Optional<ReversalTransactionGetDTO> createTransaction(
       TransactionCreateDTO transactionCreateDTO) {
@@ -39,12 +42,19 @@ public class ReversalTransactionService implements TransactionService<ReversalTr
     if (!validator.validate(reversalTransaction).isEmpty()) {
       return Optional.empty();
     }
-    final var referencedAuthorizeTransaction = reversalTransaction.getAuthorizeTransaction();
-    if (!referencedAuthorizeTransaction.getTransactionStatus().equals(TransactionStatus.APPROVED)) {
+    final var optionalAuthTransaction =
+        authorizeTransactionRepository.findById(reversalTransaction.getAuthorizeTransactionId());
+    if (optionalAuthTransaction.isEmpty()) {
+      return Optional.empty();
+    }
+    final var authTransaction = optionalAuthTransaction.get();
+
+    if (!authTransaction.getTransactionStatus().equals(TransactionStatus.APPROVED)) {
       reversalTransaction.setTransactionStatus(TransactionStatus.ERROR);
     } else {
       reversalTransaction.setTransactionStatus(TransactionStatus.APPROVED);
-      referencedAuthorizeTransaction.setTransactionStatus(TransactionStatus.REVERSED);
+      authTransaction.setTransactionStatus(TransactionStatus.REVERSED);
+      authorizeTransactionRepository.save(authTransaction);
     }
     return Optional.of(reversalTransactionRepository.save(reversalTransaction));
   }

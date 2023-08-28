@@ -16,7 +16,7 @@ public class ReversalTransactionValidator implements Validator {
   @Override
   public void validate(Object target, Errors errors) {
     if (target instanceof ReversalTransaction reversalTransaction) {
-      if (Objects.isNull(reversalTransaction.getAuthorizeTransaction())) {
+      if (Objects.isNull(reversalTransaction.getAuthorizeTransactionId())) {
         errors.rejectValue(
             "authorizeTransaction",
             "no.charge",

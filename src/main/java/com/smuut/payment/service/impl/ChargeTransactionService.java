@@ -4,6 +4,7 @@ import com.smuut.payment.dto.ChargeTransactionGetDTO;
 import com.smuut.payment.dto.TransactionCreateDTO;
 import com.smuut.payment.entity.ChargeTransaction;
 import com.smuut.payment.entity.TransactionStatus;
+import com.smuut.payment.repository.AuthorizeTransactionRepository;
 import com.smuut.payment.repository.ChargeTransactionRepository;
 import com.smuut.payment.service.TransactionService;
 import jakarta.validation.Validator;
@@ -25,6 +26,8 @@ public class ChargeTransactionService implements TransactionService<ChargeTransa
 
   private final ModelMapper modelMapper;
 
+  private final AuthorizeTransactionRepository authorizeTransactionRepository;
+
   @Override
   public Optional<ChargeTransactionGetDTO> createTransaction(
       TransactionCreateDTO transactionCreateDTO) {
@@ -37,10 +40,14 @@ public class ChargeTransactionService implements TransactionService<ChargeTransa
     if (!validator.validate(chargeTransaction).isEmpty()) {
       return Optional.empty();
     }
-    if (!chargeTransaction
-        .getAuthorizeTransaction()
-        .getTransactionStatus()
-        .equals(TransactionStatus.APPROVED)) {
+    final var authorizeTransaction =
+        authorizeTransactionRepository.findById(chargeTransaction.getAuthorizeTransactionId());
+
+    if (authorizeTransaction.isEmpty()) {
+      return Optional.empty();
+    }
+
+    if (!authorizeTransaction.get().getTransactionStatus().equals(TransactionStatus.APPROVED)) {
       chargeTransaction.setTransactionStatus(TransactionStatus.ERROR);
     } else {
       chargeTransaction.setTransactionStatus(TransactionStatus.APPROVED);
