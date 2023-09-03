@@ -28,9 +28,8 @@ public class BaseTransactionService implements TransactionService<TransactionGet
 
   @Override
   public Optional<TransactionGetDTO> createTransaction(TransactionCreateDTO transactionCreateDTO) {
-    final var isMerchantActive =
-        merchantRepository.findById(transactionCreateDTO.getMerchantId()).map(Merchant::isActive);
-    if (isMerchantActive.isEmpty() || !isMerchantActive.get()) {
+    final var isMerchantActive = merchantRepository.findById(transactionCreateDTO.getMerchantId()).map(Merchant::isActive);
+    if(isMerchantActive.isEmpty() || !isMerchantActive.get()){
       return Optional.empty();
     }
     return transactionFactory.createTransaction(transactionCreateDTO);
