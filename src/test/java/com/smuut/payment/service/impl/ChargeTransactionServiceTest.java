@@ -10,6 +10,7 @@ import com.smuut.payment.dto.TransactionCreateDTO;
 import com.smuut.payment.entity.AuthorizeTransaction;
 import com.smuut.payment.entity.ChargeTransaction;
 import com.smuut.payment.entity.TransactionStatus;
+import com.smuut.payment.repository.AuthorizeTransactionRepository;
 import com.smuut.payment.repository.ChargeTransactionRepository;
 import jakarta.validation.Validator;
 import java.util.HashSet;
@@ -29,6 +30,8 @@ import org.springframework.data.domain.Pageable;
 @ExtendWith(MockitoExtension.class)
 public class ChargeTransactionServiceTest {
 
+  @Mock private AuthorizeTransactionRepository authorizeTransactionRepository;
+
   @Mock private ChargeTransactionRepository chargeTransactionRepository;
 
   @Mock private Validator validator;
@@ -39,12 +42,14 @@ public class ChargeTransactionServiceTest {
 
   @Test
   public void whenCreateChargeTransactionIsCalled_ThenReturnChargeTransactionGetDTO() {
-    final var createTransactionDTO = TransactionCreateDTO.builder().build();
+    final var createTransactionDTO =
+        TransactionCreateDTO.builder().targetTransaction(UUID.randomUUID()).build();
     final var transactionEntity = new ChargeTransaction();
     final var authTransaction = new AuthorizeTransaction();
     authTransaction.setTransactionStatus(TransactionStatus.APPROVED);
-    transactionEntity.setAuthorizeTransaction(authTransaction);
+    transactionEntity.setAuthorizeTransactionId(authTransaction.getId());
     Mockito.when(chargeTransactionRepository.save(any())).thenReturn(transactionEntity);
+    when(authorizeTransactionRepository.findById(any())).thenReturn(Optional.of(authTransaction));
     when(modelMapper.map(createTransactionDTO, ChargeTransaction.class))
         .thenReturn(transactionEntity);
     when(validator.validate(transactionEntity)).thenReturn(new HashSet<>());

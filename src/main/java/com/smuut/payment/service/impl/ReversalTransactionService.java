@@ -49,7 +49,7 @@ public class ReversalTransactionService implements TransactionService<ReversalTr
     }
     final var authTransaction = optionalAuthTransaction.get();
 
-    if (!authTransaction.getTransactionStatus().equals(TransactionStatus.APPROVED)) {
+    if (!TransactionStatus.APPROVED.equals(authTransaction.getTransactionStatus())) {
       reversalTransaction.setTransactionStatus(TransactionStatus.ERROR);
     } else {
       reversalTransaction.setTransactionStatus(TransactionStatus.APPROVED);

@@ -14,6 +14,5 @@ public class AuthorizeTransactionGetDTOMapping implements MappingConfiguration {
     modelMapper
         .typeMap(AuthorizeTransaction.class, AuthorizeTransactionGetDTO.class)
         .implicitMappings();
-    ;
   }
 }

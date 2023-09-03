@@ -47,7 +47,7 @@ public class ChargeTransactionService implements TransactionService<ChargeTransa
       return Optional.empty();
     }
 
-    if (!authorizeTransaction.get().getTransactionStatus().equals(TransactionStatus.APPROVED)) {
+    if (!TransactionStatus.APPROVED.equals(authorizeTransaction.get().getTransactionStatus())) {
       chargeTransaction.setTransactionStatus(TransactionStatus.ERROR);
     } else {
       chargeTransaction.setTransactionStatus(TransactionStatus.APPROVED);

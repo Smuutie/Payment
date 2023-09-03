@@ -11,6 +11,8 @@ import com.smuut.payment.entity.AuthorizeTransaction;
 import com.smuut.payment.entity.ChargeTransaction;
 import com.smuut.payment.entity.RefundTransaction;
 import com.smuut.payment.entity.TransactionStatus;
+import com.smuut.payment.repository.AuthorizeTransactionRepository;
+import com.smuut.payment.repository.ChargeTransactionRepository;
 import com.smuut.payment.repository.RefundTransactionRepository;
 import jakarta.validation.Validator;
 import java.util.HashSet;
@@ -32,6 +34,10 @@ public class RefundTransactionServiceTest {
 
   @Mock private RefundTransactionRepository refundTransactionRepository;
 
+  @Mock private ChargeTransactionRepository chargeTransactionRepository;
+
+  @Mock private AuthorizeTransactionRepository authorizeTransactionRepository;
+
   @Mock private Validator validator;
 
   @Mock private ModelMapper modelMapper;
@@ -46,8 +52,11 @@ public class RefundTransactionServiceTest {
     final var authTransaction = new AuthorizeTransaction();
     chargeTransaction.setTransactionStatus(TransactionStatus.APPROVED);
     authTransaction.setTransactionStatus(TransactionStatus.APPROVED);
-    chargeTransaction.setAuthorizeTransaction(authTransaction);
-    transactionEntity.setChargeTransaction(chargeTransaction);
+    chargeTransaction.setAuthorizeTransactionId(authTransaction.getId());
+    transactionEntity.setChargeTransactionId(chargeTransaction.getId());
+    when(chargeTransactionRepository.findById(any())).thenReturn(Optional.of(chargeTransaction));
+    when(authorizeTransactionRepository.findById(any())).thenReturn(Optional.of(authTransaction));
+    when(chargeTransactionRepository.findById(any())).thenReturn(Optional.of(chargeTransaction));
     Mockito.when(refundTransactionRepository.save(any())).thenReturn(transactionEntity);
     when(modelMapper.map(createTransactionDTO, RefundTransaction.class))
         .thenReturn(transactionEntity);
