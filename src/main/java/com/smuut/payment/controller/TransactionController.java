@@ -3,6 +3,7 @@ package com.smuut.payment.controller;
 import com.smuut.payment.dto.TransactionCreateDTO;
 import com.smuut.payment.dto.TransactionGetDTO;
 import com.smuut.payment.service.impl.BaseTransactionService;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RolesAllowed({"merchant", "admin"})
 @RequestMapping("/transaction")
 @RequiredArgsConstructor
 public class TransactionController {
@@ -46,6 +48,7 @@ public class TransactionController {
     return ResponseEntity.of(transactionService.createTransaction(transactionCreateDTO));
   }
 
+  @RolesAllowed("admin")
   @DeleteMapping(
       path = "/{transactionId}",
       consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})

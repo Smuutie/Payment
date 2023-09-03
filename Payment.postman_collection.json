@@ -191,5 +191,72 @@
 			},
 			"response": []
 		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{bearer-token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"const moment = require('moment')",
+					"",
+					"const getJWT = {",
+					"    url: `http://127.0.0.1:9060/realms/Payment/protocol/openid-connect/token`,",
+					"    method: 'POST',",
+					"    header: {",
+					"        'Content-Type': 'application/x-www-form-urlencoded'",
+					"    },",
+					"    body: {",
+					"        mode: 'urlencoded',",
+					"        urlencoded: [",
+					"            {\"key\":\"client_id\",\"value\":\"payment\"},",
+					"            {\"key\":\"username\",\"value\":\"merchant\"},",
+					"            {\"key\":\"password\",\"value\":\"merchant\"},",
+					"            {\"key\":\"grant_type\",\"value\":\"password\"}",
+					"        ]",
+					"    }",
+					"}",
+					"pm.sendRequest(getJWT, (err, res) => {",
+					"        if (err === null) {",
+					"            pm.collectionVariables.set('bearer-token', `${res.json().access_token}`)",
+					"            ",
+					"            var expiryDate = moment().add(res.json().expires_in, 's').valueOf()",
+					"            pm.collectionVariables.set('AccessTokenExpiry', expiryDate)",
+					"        }",
+					"});"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "bearer-token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "AccessTokenExpiry",
+			"value": "",
+			"type": "string"
+		}
 	]
 }

@@ -17,7 +17,6 @@ services:
 
   keycloak:
     image: quay.io/keycloak/keycloak:22.0
-    container_name: keycloak-service
     environment:
       KC_DB: mysql
       KC_DB_URL: jdbc:mysql://mysql:3306/mydatabase
@@ -27,9 +26,9 @@ services:
       KEYCLOAK_ADMIN_PASSWORD: admin
       KC_HEALTH_ENABLED: true
       KC_HTTP_PORT: 9060
-    command: [ "start-dev" ] #  export [--dir|--file] <path> --realm my-realm to export
-#    volumes:
-#      - ./config/keycloak-realm.json:/opt/keycloak/data/import/keycloak-realm.json
+    command: [ "start-dev --import-realm" ]
+    volumes:
+      - ./config/Payment-realm.json:/opt/keycloak/data/import/Payment-realm.json
     ports:
       - "9060:9060"
     depends_on:
