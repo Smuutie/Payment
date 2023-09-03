@@ -157,6 +157,39 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Update merchant",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Renamed Admin\"\n}"
+				},
+				"url": {
+					"raw": "http://127.0.0.1:9080/merchant/36be6fca-4500-11ee-be56-0242ac120002",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "9080",
+					"path": [
+						"merchant",
+						"36be6fca-4500-11ee-be56-0242ac120002"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

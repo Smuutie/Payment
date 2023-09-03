@@ -2,6 +2,7 @@ package com.smuut.payment.service;
 
 import com.smuut.payment.dto.MerchantCreateDTO;
 import com.smuut.payment.dto.MerchantGetDTO;
+import com.smuut.payment.dto.MerchantUpdateDTO;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
@@ -16,4 +17,6 @@ public interface MerchantService {
   Optional<MerchantGetDTO> getMerchant(UUID merchantId);
 
   boolean deleteMerchant(UUID merchantId);
+
+  Optional<MerchantGetDTO> updateMerchant(UUID merchantId, MerchantUpdateDTO merchantUpdateDTO);
 }

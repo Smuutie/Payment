@@ -2,6 +2,7 @@ package com.smuut.payment.service.impl;
 
 import com.smuut.payment.dto.MerchantCreateDTO;
 import com.smuut.payment.dto.MerchantGetDTO;
+import com.smuut.payment.dto.MerchantUpdateDTO;
 import com.smuut.payment.entity.Merchant;
 import com.smuut.payment.repository.MerchantRepository;
 import com.smuut.payment.service.MerchantService;
@@ -56,5 +57,17 @@ public class MerchantServiceImpl implements MerchantService {
     }
     merchantRepository.delete(optionalMerchant.get());
     return true;
+  }
+
+  @Override
+  public Optional<MerchantGetDTO> updateMerchant(
+      UUID merchantId, MerchantUpdateDTO merchantUpdateDTO) {
+    return merchantRepository
+        .findById(merchantId)
+        .map(
+            merchant -> {
+              modelMapper.map(merchantUpdateDTO, merchant);
+              return modelMapper.map(merchantRepository.save(merchant), MerchantGetDTO.class);
+            });
   }
 }

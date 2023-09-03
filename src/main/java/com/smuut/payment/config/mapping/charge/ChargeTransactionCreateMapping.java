@@ -1,8 +1,9 @@
-package com.smuut.payment.config.mapping;
+package com.smuut.payment.config.mapping.charge;
 
 import com.smuut.payment.config.MappingConfiguration;
 import com.smuut.payment.dto.TransactionCreateDTO;
-import com.smuut.payment.entity.*;
+import com.smuut.payment.entity.ChargeTransaction;
+import com.smuut.payment.entity.Merchant;
 import com.smuut.payment.repository.MerchantRepository;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -13,13 +14,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class ReversalTransactionCreateMapping implements MappingConfiguration {
+public class ChargeTransactionCreateMapping implements MappingConfiguration {
 
   private final MerchantRepository merchantRepository;
 
   @Override
   public void configure(ModelMapper modelMapper) {
-    final var typemap = modelMapper.typeMap(TransactionCreateDTO.class, ReversalTransaction.class);
+    final var typemap = modelMapper.typeMap(TransactionCreateDTO.class, ChargeTransaction.class);
 
     final Converter<UUID, Merchant> pkToMerchantConverter =
         context -> merchantRepository.findById(context.getSource()).orElse(null);
@@ -27,17 +28,17 @@ public class ReversalTransactionCreateMapping implements MappingConfiguration {
     typemap
         .addMappings(
             context -> {
-              context.skip(ReversalTransaction::setId);
-              context.skip(ReversalTransaction::setCreatedAt);
+              context.skip(ChargeTransaction::setId);
+              context.skip(ChargeTransaction::setCreatedAt);
               context
                   .when(Conditions.isNotNull())
                   .using(pkToMerchantConverter)
-                  .map(TransactionCreateDTO::getMerchantId, ReversalTransaction::setMerchant);
+                  .map(TransactionCreateDTO::getMerchantId, ChargeTransaction::setMerchant);
               context
                   .when(Conditions.isNotNull())
                   .map(
                       TransactionCreateDTO::getTargetTransaction,
-                      ReversalTransaction::setAuthorizeTransactionId);
+                      ChargeTransaction::setAuthorizeTransactionId);
             })
         .implicitMappings();
   }

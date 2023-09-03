@@ -2,6 +2,7 @@ package com.smuut.payment.controller;
 
 import com.smuut.payment.dto.MerchantCreateDTO;
 import com.smuut.payment.dto.MerchantGetDTO;
+import com.smuut.payment.dto.MerchantUpdateDTO;
 import com.smuut.payment.service.MerchantService;
 import jakarta.validation.Valid;
 import java.util.UUID;
@@ -43,6 +44,16 @@ public class MerchantController {
   public ResponseEntity<MerchantGetDTO> createMerchant(
       @Valid @RequestBody MerchantCreateDTO merchantCreateDTO) {
     return ResponseEntity.of(merchantService.createMerchant(merchantCreateDTO));
+  }
+
+  @PutMapping(
+      path = "/{merchantId}",
+      produces = MediaType.APPLICATION_JSON_VALUE,
+      consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+  public ResponseEntity<MerchantGetDTO> updateMerchant(
+      @PathVariable("merchantId") UUID merchantId,
+      @Valid @RequestBody MerchantUpdateDTO merchantUpdateDTO) {
+    return ResponseEntity.of(merchantService.updateMerchant(merchantId, merchantUpdateDTO));
   }
 
   @DeleteMapping(
