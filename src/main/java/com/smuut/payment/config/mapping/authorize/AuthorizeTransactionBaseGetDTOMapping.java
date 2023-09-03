@@ -12,6 +12,5 @@ public class AuthorizeTransactionBaseGetDTOMapping implements MappingConfigurati
   @Override
   public void configure(ModelMapper modelMapper) {
     modelMapper.typeMap(AuthorizeTransaction.class, TransactionGetDTO.class).implicitMappings();
-    ;
   }
 }
