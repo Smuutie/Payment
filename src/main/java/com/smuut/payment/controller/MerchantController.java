@@ -4,6 +4,7 @@ import com.smuut.payment.dto.MerchantCreateDTO;
 import com.smuut.payment.dto.MerchantGetDTO;
 import com.smuut.payment.dto.MerchantUpdateDTO;
 import com.smuut.payment.service.MerchantService;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/merchant")
 @RequiredArgsConstructor
+@RolesAllowed({"merchant", "admin"})
 public class MerchantController {
 
   private final MerchantService merchantService;
@@ -38,6 +40,7 @@ public class MerchantController {
     return ResponseEntity.of(merchantService.getMerchant(merchantId));
   }
 
+  @RolesAllowed("admin")
   @PostMapping(
       produces = MediaType.APPLICATION_JSON_VALUE,
       consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
@@ -56,6 +59,7 @@ public class MerchantController {
     return ResponseEntity.of(merchantService.updateMerchant(merchantId, merchantUpdateDTO));
   }
 
+  @RolesAllowed("admin")
   @DeleteMapping(
       path = "/{merchantId}",
       consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})

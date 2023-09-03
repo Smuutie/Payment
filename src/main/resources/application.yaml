@@ -2,6 +2,14 @@ server:
   port: 9080
 
 spring:
+  config:
+    import: optional:file:.env[.properties]
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_URL:http://127.0.0.1:9060}/realms/${KEYCLOAK_REALM:Payment}
+          jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
   docker:
     compose:
       file: docker-compose.yaml
@@ -21,3 +29,6 @@ springdoc:
   swagger-ui:
     path: /swagger-ui
   default-produces-media-type: application/json
+  default-consumes-media-type: application/json
+keycloak:
+  client: ${KEYCLOAK_CLIENT:payment}

@@ -2,7 +2,9 @@ package com.smuut.payment.service.impl;
 
 import com.smuut.payment.dto.TransactionCreateDTO;
 import com.smuut.payment.dto.TransactionGetDTO;
+import com.smuut.payment.entity.Merchant;
 import com.smuut.payment.repository.BaseTransactionRepository;
+import com.smuut.payment.repository.MerchantRepository;
 import com.smuut.payment.service.TransactionService;
 import java.util.Optional;
 import java.util.UUID;
@@ -22,8 +24,14 @@ public class BaseTransactionService implements TransactionService<TransactionGet
 
   private final ModelMapper modelMapper;
 
+  private final MerchantRepository merchantRepository;
+
   @Override
   public Optional<TransactionGetDTO> createTransaction(TransactionCreateDTO transactionCreateDTO) {
+    final var isMerchantActive = merchantRepository.findById(transactionCreateDTO.getMerchantId()).map(Merchant::isActive);
+    if(isMerchantActive.isEmpty() || !isMerchantActive.get()){
+      return Optional.empty();
+    }
     return transactionFactory.createTransaction(transactionCreateDTO);
   }
 
